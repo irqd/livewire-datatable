@@ -15,6 +15,12 @@ class CreateUser extends Component
         $this->form->store();
     }
 
+    public function resetForm()
+    {
+        $this->form->reset();
+        $this->form->resetErrorBag();
+    }
+
     public function render()
     {   
         $roles = Role::all();
