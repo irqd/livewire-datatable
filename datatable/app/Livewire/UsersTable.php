@@ -11,10 +11,26 @@ class UsersTable extends Component
 {   
     use WithPagination;
 
-    #[On('user-created')] 
+    #[On('user-created')]
     public function refreshDataTable()
     {
        $this->render();
+    }
+
+    public function toggleStatus(User $user)
+    {
+        $user->update([
+            'status' => !$user->status,
+        ]);
+
+        $this->dispatch('dispatch-toast', type: 'success', message: 'User status updated successfully!');
+    }
+
+    public function deleteUser(User $user)
+    {
+        $user->delete();
+
+        $this->dispatch('dispatch-toast', type: 'danger', message: 'User deleted successfully!');
     }
 
     public function render()

@@ -6,6 +6,10 @@
         $refs.toast.querySelector('.toast-body').innerHTML = message;
 
         toast.show();
+
+        $refs.toast.addEventListener('hidden.bs.toast', () => {
+            $refs.toast.classList.remove('text-bg-' + type);
+        })
     }
 }" x-on:dispatch-toast.window="showToast($event.detail.type, $event.detail.message)">
     <div id="liveToast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" x-ref="toast">

@@ -73,33 +73,7 @@
       </thead>
       <tbody>
          @foreach($users as $user)
-               <tr>
-                  <td>
-                     <div class="form-check d-flex justify-content-center pt-1">
-                        <input type="checkbox" class="form-check-input">
-                     </div>
-                  </td>
-                  <td>{{ $user->name }}</td>
-                  <td>{{ $user->email }}</td>
-                  <td>{{ ucfirst($user->role->name) }}</td>
-                  <td>
-                     <div class="form-check form-switch d-flex justify-content-center">
-                        <input 
-                           class="form-check-input" 
-                           type="checkbox" 
-                           role="switch"
-                           @if($user->status == 1) checked @endif
-                        >
-                     </div>
-                  </td>
-                  <td>{{ $user->created_at->diffForHumans() }}</td>
-                  <td>
-                     <div class="d-flex justify-content-between align-items-center gap-1">
-                        <button class="btn btn-sm btn-primary">Edit</button>
-                        <button class="btn btn-sm btn-danger">Delete</button>
-                     </div>
-                  </td>
-               </tr>
+               <livewire:user-row :user="$user" :key="$user->id" />
          @endforeach
       </tbody>
    </table>
@@ -114,7 +88,6 @@
       </div>
    </div>
 
-   @teleport('body')
-      <livewire:create-user />
-   @endteleport
+   <livewire:create-user />
+   <livewire:edit-user />
 </div>
