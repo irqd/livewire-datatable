@@ -25,9 +25,16 @@ class UserForm extends Form
 
     public function store()
     {   
+        //dd($this->role);
         $this->validate();
         
         // Store the user...
-        User::create($this->all());
+        User::create([
+            'name' => $this->name,
+            'email' => $this->email,
+            'password' => $this->password,
+            'role_id' => $this->role,
+            'status' => $this->status,
+        ]);
     }
 }

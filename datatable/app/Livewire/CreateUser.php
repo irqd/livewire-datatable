@@ -13,6 +13,8 @@ class CreateUser extends Component
     public function submit()
     {   
         $this->form->store();
+
+        $this->dispatch('user-created');
     }
 
     public function resetForm()

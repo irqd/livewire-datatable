@@ -1,5 +1,15 @@
-<div x-data="$refs.modal.addEventListener('hidden.bs.modal', () => $wire.resetForm())">
-    <div wire:ignore.self class="modal fade" id="create-user-modal" tabindex="-1" aria-labelledby="create-user-label" aria-hidden="true" x-ref="modal">
+<div 
+    x-data="$refs.modal.addEventListener('hidden.bs.modal', () => $wire.resetForm())"
+    x-on:user-created="
+        bootstrap.Modal.getInstance($refs.modal).hide();
+
+        $dispatch('dispatch-toast', {
+            type: 'success',
+            message: 'User created successfully!'
+        });
+    "
+>
+    <div wire:ignore.self class="modal fade" id="create-user-modal" tabindex="-1" aria-labelledby="create-user-label" aria-hidden="true" x-ref="modal" >
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -19,6 +29,7 @@
                         <x-input-field 
                             label="Email" 
                             id="email"
+                            type="email"
                             name="form.email"
                             placeholder="Enter email"
                             wire:model="form.email"
@@ -27,6 +38,7 @@
                         <x-input-field 
                             label="Password" 
                             id="password"
+                            type="password"
                             name="form.password"
                             placeholder="Enter password"
                             wire:model="form.password"
