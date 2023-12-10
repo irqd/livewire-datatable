@@ -1,9 +1,4 @@
 <tr>
-   <td>
-      <div class="form-check d-flex justify-content-center pt-1">
-         <input type="checkbox" class="form-check-input">
-      </div>
-   </td>
    <td>{{ $user->name }}</td>
    <td>{{ $user->email }}</td>
    <td>{{ ucfirst($user->role->name) }}</td>

@@ -14,10 +14,32 @@ class UsersTable extends Component
     public $search = '';
     public $limit = 10;
 
+    public $sortedColumn = 'created_at';
+    public $sortDirection = 'desc';
+
+    public $role = '0';
+    public $status = 'all';
+
     #[On('user-created')]
     public function refreshDataTable()
     {
        $this->render();
+    }
+
+    public function sortColumn($column)
+    {   
+        $this->resetPage();
+
+        if($this->sortedColumn == $column) {
+            $this->sortDirection = ($this->sortDirection == 'asc') ? 'desc' : 'asc';
+            $this->dispatch('sorted-direction', $this->sortDirection);
+            return;
+        }
+        
+        $this->sortedColumn = $column;
+        $this->sortDirection = 'asc';
+
+        $this->dispatch('sorted-direction', $this->sortDirection);
     }
 
     public function toggleStatus(User $user)
@@ -37,9 +59,41 @@ class UsersTable extends Component
     }
 
     public function render()
-    {
+    {   
+        $role_options = [
+            ['value' => '0', 'label' => 'All'],
+            ['value' => '1', 'label' => 'Admin'],
+            ['value' => '2', 'label' => 'User'],
+            ['value' => '3', 'label' => 'Guest']
+        ];
+
+        $status_options = [
+            ['value' => 'all', 'label' => 'All'],
+            ['value' => 'active', 'label' => 'Active'],
+            ['value' => 'inactive', 'label' => 'Inactive'],
+        ];
+
+        $query = User::query();
+
+        //$total_users = $query->count();
+
         return view('livewire.users-table', [
-            'users' => User::search($this->search)->latest()->paginate($this->limit),
+            'users' => $query->search($this->search)
+            ->when($this->role != '0', function ($query) {
+                $query->where('role_id', $this->role);
+            })
+            ->when($this->status != 'all', function ($query) {
+                $query->where('status', $this->status == 'active' ? 1 : 0);
+            })
+            ->when($this->sortedColumn, function ($query) {
+                $query->orderBy($this->sortedColumn, $this->sortDirection);
+            })
+            ->paginate($this->limit),
+            'role_options' => $role_options,
+            'status_options' => $status_options,
+            'total_users' => (clone $query)->count(),
+            'active_users' => (clone $query)->where('status', 1)->count(),
+            'inactive_users' => (clone $query)->where('status', 0)->count(),
         ]);
     }
 }
