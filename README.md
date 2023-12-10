@@ -1,1 +1,1 @@
-## Playground for building livewire components..
+## A demo project showcasing the power of livewire for creating datatables.
