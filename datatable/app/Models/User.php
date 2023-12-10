@@ -8,6 +8,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Scout\Searchable;
 
 class User extends Authenticatable
 {
@@ -49,5 +50,11 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function scopeSearch($query, $value)
+    {
+        $query->where('name', 'like', '%' . $value . '%')
+            ->orWhere('email', 'like', '%' . $value . '%');
     }
 }

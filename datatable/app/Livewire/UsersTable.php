@@ -11,6 +11,9 @@ class UsersTable extends Component
 {   
     use WithPagination;
 
+    public $search = '';
+    public $limit = 10;
+
     #[On('user-created')]
     public function refreshDataTable()
     {
@@ -36,7 +39,7 @@ class UsersTable extends Component
     public function render()
     {
         return view('livewire.users-table', [
-            'users' => User::latest()->simplePaginate(10),
+            'users' => User::search($this->search)->latest()->paginate($this->limit),
         ]);
     }
 }

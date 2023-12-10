@@ -6,6 +6,29 @@
       </div>
    </div>
 
+   <div class="row gx-1 mb-3">
+      <div class="col-md-3">
+         <div class="card card-body">
+            Total Users
+         </div>
+      </div>
+      <div class="col-md-3">
+         <div class="card card-body">
+            Active
+         </div>
+      </div>
+      <div class="col-md-3">
+         <div class="card card-body">
+            Inactive
+         </div>
+      </div>
+      <div class="col-md-3">
+         <div class="card card-body">
+            Roles
+         </div>
+      </div>
+   </div>
+
    <div class="card card-body mb-3">
       <div class="row gx-2">
          <div class="col-md-3">
@@ -32,59 +55,37 @@
    </div>
 
    <div class="d-flex justify-content-between mb-2">
-      <div class="d-flex gap-1 align-items-center">
-         Show
-         <select class="form-select form-select-sm">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-         </select>
-         entries
-      </div>
-
-      <div class="d-flex gap-1">
-         <input type="text" wire:model="search" class="form-control form-control-sm" placeholder="Search...">
-      </div>
+      <livewire:limit-user wire:model.live="limit" />
+      <livewire:search-user wire:model.live.debounce.500ms="search" />
    </div>
 
    <table class="table table-bordered table-striped">
       <thead>
-         <tr>
-            <th colspan="7">
-               Bulk Action:
-               <button class="btn btn-sm btn-danger">
-                  Delete Selected
-               </button>
-            </th>
-         </tr>
-         <tr>
-            <th>
-               <div class="form-check d-flex justify-content-center pt-1">
-                  <input type="checkbox" class="form-check-input">
-               </div>
-            </th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Created At</th>
-            <th style="width: 0">Actions</th>
-         </tr>
+         <livewire:user-bulk-action />
+         <livewire:user-col />
       </thead>
       <tbody>
          @foreach($users as $user)
-               <livewire:user-row :user="$user" :key="$user->id" />
+            <livewire:user-row :user="$user" :key="$user->id" />
          @endforeach
       </tbody>
    </table>
    
    <div class="d-flex justify-content-between">
       <div class="d-flex">
-         <span>Showing 1 to 5 of 5 entries</span>
+         <span>
+            Showing 
+            {{ $users->firstItem() ?? 0 }} 
+            to 
+            {{ $users->lastItem() ?? 0 }} 
+            of 
+            {{ $users->total() }} 
+            entries
+         </span> 
       </div>
       
       <div>
-         {{ $users->links() }}
+         {{ $users->onEachSide(1)->links() }}
       </div>
    </div>
 
